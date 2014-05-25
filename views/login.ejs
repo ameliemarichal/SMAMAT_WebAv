@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Application ISEP</title>
+    </head>
+
+    <body>
+		<form method="post">
+		  <input type="text" name="username" placeholder="Type your login" autofocus required<% if (username) { %> value="<%= username %>"<% } %>>
+		  <input type="password" name="pass" placeholder="Type your password" autofocus required<% if (pass) { %> value="<%= pass %>"<% } %>>
+		  <input type="submit">
+		</form>
+	</body>
+</html>
