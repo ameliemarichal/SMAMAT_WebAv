@@ -1,2 +1,0 @@
-
-alert('linked perfectly');

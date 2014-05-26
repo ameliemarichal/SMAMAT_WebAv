@@ -56,30 +56,27 @@ function requireLogin (req, res, next) {
     res.redirect("/login");
   }
 }
+
 /** Home page (requires authentication) */
 app.get('/', [requireLogin], function (req, res, next) {
-  res.render('index');
-});
-/** Login form */
-app.get("/login", function (req, res) {
-  // Show form, default value = current username
-  res.render("login", { "username": req.session.username, "pass": req.session.pass, "error": null });
+  res.render('index', { "username": req.session.username });
 });
 
+/** Login form */
+app.get("/login", function (req, res) {
+  // Show form, default value = current username & empty password
+  res.render("login", { "username": req.body.username, "pass": "","error": null });
+});
 app.post("/login", function (req, res) {
-  //var motpasse ="";
-  var options = { "username": req.body.username, "pass": req.body.pass,"error": null };
-  if (!req.body.username) {
-    options.error = "User name is required";
-    res.render("login", options);
-  } else if (req.body.username == req.session.username) {
+  var options = { "username": "", "pass": "","error": null };
+  if (req.body.username == req.session.username) {
     // User has not changed username, accept it as-is
     res.redirect("/");
   } else if (!req.body.username.match(/^[a-zA-Z0-9\-_]{3,}$/)) {
     options.error = "User name must have at least 3 alphanumeric characters";
     res.render("login", options);
   } else {
- // Validate if username is free
+    // Validate if username is free
     sessionStore.all(function (err, sessions) {
       if (!err) {
         var found = false;
@@ -93,24 +90,26 @@ app.post("/login", function (req, res) {
         }
       }
       if (err) {
+        //if error, display error message
         options.error = ""+err;
         res.render("login", options);
       } else {
+        console.log('Tu es seul');
         var sql = 'SELECT * FROM projet_web.users WHERE name = '+ connection.escape(req.body.username);
-        connection.query(sql, function(err, rows,fields) {
-          if (err) throw err;
+        connection.query(sql, function(errSql, rows, fields) {
+          if (errSql) throw errSql;
           console.log(rows[0].password);
-          var motpasse = rows[0].password; 
-          //connection.end();
+          var motpasse = rows[0].password;
           console.log(motpasse);
-          if (req.body.pass == motpasse){
-            console.log('yes');
+          if (req.body.pass != motpasse) {
+            options.error = "Je suis presque sûr que tu t'es trompé de de mot de passe!!";
+            res.render("login", options);
+          }else if (req.body.pass == motpasse)
+          {
             req.session.username = req.body.username;
+            req.session.pass = req.body.pass;
+            console.log("le mot de passe est censé être ok");
             res.redirect("/");
-          }else{
-            console.log('bad!!');
-            options.error = "Already used or other error I do not know sorry"
-            res.render("login", {"username" : "", "pass" : ""});
           }
         });
       }
@@ -118,6 +117,11 @@ app.post("/login", function (req, res) {
   }
 });
 
+/** WebSocket */
+//var sockets = require('socket.io').listen(server).of('/Application ISEP');
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 /** Start server */
 if (!module.parent) {
   server.listen(port, function () {
@@ -125,7 +129,8 @@ if (!module.parent) {
   })
 }
 
-
+//DataBase connection
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //attention, ne fonction que pour Aimery car il faut avoir crée la bdd correspondante
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
