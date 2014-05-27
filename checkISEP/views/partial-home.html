@@ -1,0 +1,8 @@
+<div ng-controller="maincontroller">
+	<a ui-sref=".ndc" class="btn btn-default" ng-class="{'btn-primary':isActiveNdc,  'btn-default':!isActiveNdc}" ng-click="isActiveNdc = !isActiveNdc; firstSelection()">Notre-Dame des Champs</a>
+	
+	<a ui-sref=".branly" class="btn btn-default" ng-class="{'btn-primary':isActiveBranly, 'btn-default':!isActiveBranly}" ng-click="isActiveBranly = !isActiveBranly; isActiveNdc = !isActiveNdc">ICP Branly</a>
+
+</div>
+
+<div ui-view></div>
