@@ -1,3 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
 
-<% layout('layout') %>
-<p>Hello, <%= username %></p>
+    <!-- CSS (load bootstrap) -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <style>
+        .navbar { border-radius:0; }
+    </style>
+
+    <!-- JS (load angular, ui-router, and our custom js file) -->
+    <script src="src/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+    <script src="controllers/maincontroller.js"></script>
+</head>
+
+<!-- apply our angular app to our site -->
+<body>
+	<div ng-app="routerApp">
+		<!-- NAVIGATION -->
+		<nav class="navbar navbar-inverse" role="navigation">
+		    <div class="navbar-header">
+		        <p class="navbar-brand" ui-sref="#">Gestionnaire Intelligent de la s&eacutecurit&eacute dans vos b&acirctiments</a>
+		    </div>
+		</nav>
+
+		<!-- MAIN CONTENT -->
+		<div class="container">
+
+			<!-- THIS IS WHERE WE WILL INJECT OUR CONTENT ============================== -->
+		    <div ui-view></div>
+
+		</div>
+
+<!-- 	<div ng-app="slideapp">
+		<div class="container">
+
+			THIS IS WHERE WE WILL INJECT OUR CONTENT ==============================
+		    <div ui-slide></div>
+
+		</div>
+	</div> -->
+</body>
+</html>

@@ -18,7 +18,7 @@ app.configure(function() {
   this.engine('ejs', require('ejs-locals'));
   this.set('views', path.join(__dirname, 'views'));
   this.set('view engine', 'ejs');
-  this.use(express.static(path.join(__dirname, '/public')));
+  this.use(express.static(path.join(__dirname, '/checkISEP')));
   // Allow parsing cookies from request headers
   this.use(express.cookieParser());
   // Session management
